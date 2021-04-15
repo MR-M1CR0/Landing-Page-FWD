@@ -17,24 +17,17 @@
  * Define Global Variables
  *
  */
-const theSections = Array.from(document.querySelectorAll("section"));
+const theSections = document.querySelectorAll("section");
 const theMenu = document.getElementById("navbar__list");
-let listItems = theSections.length;
+const piece = document.createDocumentFragment();
 
 /**
  * End Global Variables
-
  * Start Helper Functions
  *
  */
-function theList() {
-  for (sect of theSections) {
-    nameOfSection = sect.getAttribute("data-nav");
-    linkOfSection = sect.getAttribute("id");
-    createList = document.createElement("li");
-    createList.innerHTML = `<a class='menu__link' href='#${linkOfSection}'>${nameOfSection}</a>`;
-    theMenu.appendChild(createList);
-  }
+function createTheNav(first, second) {
+  return `<a class ='menu__link' data-id='${first}'>${second}</a>`;
 }
 
 function theSectionView(argu) {
@@ -42,27 +35,54 @@ function theSectionView(argu) {
   return position.top >= 0;
 }
 
-function toggleTheClass() {
-  for (sect of theSections) {
-    if (theSectionView(sect)) {
-      if (!sect.classList.contains("your-active-class")) {
-        sect.classList.add("your-active-class");
-      }
-    } else {
-      sect.classList.remove("your-active-class");
-    }
-  }
-}
 /**
  * End Helper Functions
+ * Begin Main Functions
+ *
  */
 
 // build the nav
-theList();
+function theList() {
+  for (let i = 0; i < theSections.length; i++) {
+    nameOfSection = theSections[i].getAttribute("data-nav");
+    linkOfSection = theSections[i].getAttribute("id");
+    createList = document.createElement("li");
+    createList.innerHTML = createTheNav(linkOfSection, nameOfSection);
+    piece.appendChild(createList);
+  }
+  theMenu.appendChild(piece);
+}
+
+// Add class 'active' to section when near top of viewport
+function toggleTheClass() {
+  for (let l = 0; l < theSections.length; l++) {
+    if (theSectionView(theSections[l])) {
+      theSections[l].classList.add("your-active-class");
+    } else {
+      theSections[l].classList.remove("your-active-class");
+    }
+  }
+}
 
 // Scroll to anchor ID using scrollTO event
-document.addEventListener("scroll", toggleTheClass);
+function elementScrolling(theEve) {
+  if (theEve.target.nodeName === "A") {
+    linkOfSection = theEve.target.getAttribute("data-id");
+    theSect = document.getElementById(linkOfSection);
+    theSect.scrollIntoView({ behavior: "smooth" });
+  }
+}
 
 /**
  * End Main Functions
+ * Begin Events
+ *
  */
+document.addEventListener("scroll", function () {
+  toggleTheClass();
+});
+theMenu.addEventListener("click", function (theEve) {
+  elementScrolling(theEve);
+});
+// Build menu
+theList();
