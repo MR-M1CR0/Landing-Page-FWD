@@ -55,11 +55,14 @@ function theList() {
 
 // Add class 'active' to section when near top of viewport
 function toggleTheClass() {
-  for (let l = 0; l < theSections.length; l++) {
-    if (theSectionView(theSections[l])) {
-      theSections[l].classList.add("your-active-class");
+  for (sect of theSections) {
+    if (theSectionView(sect)) {
+      if (!sect.classList.contains("your-active-class")) {
+        sect.classList.add("your-active-class");
+      }
     } else {
-      theSections[l].classList.remove("your-active-class");
+      // Remove class 'active' to section from section
+      sect.classList.remove("your-active-class");
     }
   }
 }
