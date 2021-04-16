@@ -61,7 +61,7 @@ function toggleTheClass() {
         sect.classList.add("your-active-class");
       }
     } else {
-      // Remove class 'active' to section from section
+      // Remove class 'active' from section
       sect.classList.remove("your-active-class");
     }
   }
